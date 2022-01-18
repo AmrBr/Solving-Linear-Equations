@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import output
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -107,6 +107,16 @@ class Ui_MainWindow(object):
             fileContent = f.readlines()
             numberOfEquations = int(fileContent[0].strip())
             method = fileContent[1].strip()
+
+            if method == "Gaussian-elimination":
+                index = 0
+            elif method == "LU decomposition":
+                index = 1
+            elif method == "Gaussian-jordan":
+                index = 2
+            elif method == "Gauss-seidel":
+                index = 3
+
             for i in range(0, numberOfEquations):
                 equations.append(fileContent[i+2].strip())
 
@@ -117,27 +127,22 @@ class Ui_MainWindow(object):
             equations = equationsTextInput.split("\n")
             initialValues = self.valuesInput.text().split()
 
-            if index == 0:
-                method = "Gaussian-elimination"
-            elif index == 1:
-                method = "LU decomposition"
-            elif index == 2:
-                method = "Gaussian-jordan"
-            elif index == 3:
-                method = "Gauss-seidel"
-            else:
-                method = "All"
+        # if index == 0:
+        #     # Call "Gauss-elimination"
+        # elif index == 1:
+        #     # Call "LU decomposition"
+        # elif index == 2:
+        #     # Call "Gaussian-jordan"
+        # elif index == 3:
+        #     # Call "Gauss-seidel"
+        # else:
+        #     # Call All Methods
 
-        if method == "Gaussian-elimination":
-            print(method)
-        elif method == "LU decomposition":
-            print(method)
-        elif method == "Gaussian-jordan":
-            print(method)
-        elif method == "Gauss-seidel":
-            print(method)
-        elif method == "All":
-            print(method)
+        self.outputWindow = QtWidgets.QMainWindow()
+        self.ui2 = output.Ui_outputWindow()
+        self.ui2.setupUi(self.outputWindow, [[1, 2, 3],[7,8,9],[4,5,6],[-8,23.2,-0.33]], 3, 4)
+        self.outputWindow.show()
+
 
 
 
