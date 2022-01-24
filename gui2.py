@@ -11,6 +11,12 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+
+        # Font Setting
+        font = QtGui.QFont()
+        font.setPointSize(7)
+
+        # ComboBox Initialization
         self.methods = QtWidgets.QComboBox(self.centralwidget)
         self.methods.setGeometry(QtCore.QRect(70, 150, 131, 22))
         self.methods.addItem("")
@@ -18,15 +24,23 @@ class Ui_MainWindow(object):
         self.methods.addItem("")
         self.methods.addItem("")
         self.methods.addItem("")
+
+        # LineEdit Initialization
         self.numberOfEqInput = QtWidgets.QLineEdit(self.centralwidget)
         self.numberOfEqInput.setGeometry(QtCore.QRect(60, 70, 151, 20))
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(440, 180, 291, 20))
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.iterationsInput = QtWidgets.QLineEdit(self.centralwidget)
         self.iterationsInput.setGeometry(QtCore.QRect(110, 490, 141, 21))
         self.percisionInput = QtWidgets.QLineEdit(self.centralwidget)
         self.percisionInput.setGeometry(QtCore.QRect(550, 490, 131, 20))
+        self.valuesInput = QtWidgets.QLineEdit(self.centralwidget)
+        self.valuesInput.setGeometry(QtCore.QRect(90, 290, 181, 20))
+        self.fileInput = QtWidgets.QLineEdit(self.centralwidget)
+        self.fileInput.setGeometry(QtCore.QRect(460, 80, 201, 20))
+
+        # Labels Initialization
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(440, 180, 291, 20))
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(110, 460, 141, 20))
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
@@ -35,36 +49,33 @@ class Ui_MainWindow(object):
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(110, 520, 141, 20))
-        font = QtGui.QFont()
-        font.setPointSize(7)
         self.label_5.setFont(font)
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(550, 520, 131, 20))
         self.label_6.setFont(font)
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
-        self.finishButton = QtWidgets.QPushButton(self.centralwidget)
-        self.finishButton.setGeometry(QtCore.QRect(350, 520, 101, 31))
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setGeometry(QtCore.QRect(90, 260, 181, 16))
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
-        self.valuesInput = QtWidgets.QLineEdit(self.centralwidget)
-        self.valuesInput.setGeometry(QtCore.QRect(90, 290, 181, 20))
-        self.fileInput = QtWidgets.QLineEdit(self.centralwidget)
-        self.fileInput.setGeometry(QtCore.QRect(460, 80, 201, 20))
+
+        # Buttons Initialization
+        self.finishButton = QtWidgets.QPushButton(self.centralwidget)
+        self.finishButton.setGeometry(QtCore.QRect(350, 520, 101, 31))
+
+        # Radio Buttons Initialization
         self.fileRadio = QtWidgets.QRadioButton(self.centralwidget)
         self.fileRadio.setGeometry(QtCore.QRect(460, 50, 201, 17))
         self.equationRadio = QtWidgets.QRadioButton(self.centralwidget)
         self.equationRadio.setGeometry(QtCore.QRect(60, 40, 151, 17))
+
+        # TextEdit Initialization
         self.equationsInput = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.equationsInput.setGeometry(QtCore.QRect(450, 220, 271, 151))
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        MainWindow.setStatusBar(self.statusbar)
 
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        # Set default radio button option
         self.equationRadio.setChecked(True)
         self.fileInput.setEnabled(False)
 
@@ -89,13 +100,14 @@ class Ui_MainWindow(object):
         self.fileRadio.setText(_translate("MainWindow", "File Name"))
         self.equationRadio.setText(_translate("MainWindow", "Number of Equations"))
 
+        # On State change functions
         self.fileRadio.toggled.connect(self.checked)
-
         self.finishButton.clicked.connect(self.clicked)
-
 
     def clicked(self):
         equations = []
+
+        # Set number of iterations and precision to default if no value is entered
         if self.iterationsInput.text().strip() == "":
             maxIterations = 50
         else:
@@ -106,6 +118,7 @@ class Ui_MainWindow(object):
         else:
             percision = self.percisionInput.text().strip()
 
+        # file is selected as an input method
         if self.fileRadio.isChecked():
             file_name = self.fileInput.text() + ".txt"
             f = open(file_name, 'r')
@@ -123,11 +136,12 @@ class Ui_MainWindow(object):
                 index = 3
 
             for i in range(0, numberOfEquations):
-                equations.append(fileContent[i+2].strip())
+                equations.append(fileContent[i + 2].strip())
 
             if index == 3:
-                initialValues = fileContent[numberOfEquations+2].strip().split(" ")
+                initialValues = fileContent[numberOfEquations + 2].strip().split(" ")
 
+        # insert the data using the GUI
         else:
             index = self.methods.currentIndex()
             numberOfEquations = int(self.numberOfEqInput.text().strip())
@@ -138,10 +152,10 @@ class Ui_MainWindow(object):
         matrix = []
         roots = []
 
-
+        # Get Coefficients of the equations
         for j in range(0, numberOfEquations):
             coeff = re.findall(r'[\d.\-+]+', equations[j])
-            coeff = [int(i) for i in coeff]
+            coeff = [float(i) for i in coeff]
             coeff[-1] = coeff[-1] * -1
             matrix.append(coeff)
 
@@ -149,6 +163,7 @@ class Ui_MainWindow(object):
         matrix2 = matrix.copy()
         matrix3 = matrix.copy()
 
+        # Calling functions for each Method
         if index == 0:
             roots.append(functions.Gauss_Elimination(matrix))
         elif index == 1:
@@ -168,7 +183,6 @@ class Ui_MainWindow(object):
         self.ui2.setupUi(self.outputWindow, roots, numberOfEquations, index)
         self.outputWindow.show()
 
-
     def checked(self):
         if self.fileRadio.isChecked():
             self.fileInput.setEnabled(True)
@@ -182,5 +196,3 @@ class Ui_MainWindow(object):
             self.valuesInput.setEnabled(True)
             self.fileInput.setEnabled(False)
             self.methods.setEnabled(True)
-
-

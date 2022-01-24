@@ -9,24 +9,32 @@ class Ui_outputWindow(object):
         outputWindow.setObjectName("MainWindow")
         outputWindow.resize(557, 437)
         self.centralwidget = QtWidgets.QWidget(outputWindow)
-        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(0, 80, 557, 221))
-        self.tableWidget.setColumnCount(numberOfEquations)
+
+        # Font Setting
         font = QtGui.QFont()
         font.setPointSize(10)
+
+        # TableWidget Initialization
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(0, 80, 557, 221))
+        # Set Rows & Columns numbers
+        self.tableWidget.setColumnCount(numberOfEquations)
         if methodIndex == 4:
             self.tableWidget.setRowCount(4)
         else:
             self.tableWidget.setRowCount(1)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
+
+        # Label Initialization
         self.methodLabel = QtWidgets.QLabel(self.centralwidget)
         self.methodLabel.setGeometry(QtCore.QRect(130, 30, 271, 31))
         self.methodLabel.setFont(font)
-        self.methodLabel.setText("")
         self.methodLabel.setAlignment(QtCore.Qt.AlignCenter)
+
         outputWindow.setCentralWidget(self.centralwidget)
 
+        # Insert Data into the Table
         self.setData(roots, methodIndex)
 
         self.retranslateUi(outputWindow)
