@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtGui,QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 import string
 
 from PyQt5.QtWidgets import QTableWidgetItem
@@ -54,12 +54,15 @@ class Ui_outputWindow(object):
             for j in range(0, len(data[i])):
                 newItem = QTableWidgetItem(str(data[i][j]))
                 self.tableWidget.setItem(i, j, newItem)
-            header2.append(header[i])
+                header2.append(header[j])
         if index == 4:
             self.tableWidget.setVerticalHeaderLabels(["Gaussian-elimination", "LU decomposition", "Gaussian-jordan", "Gauss-seidel"])
         else:
             self.tableWidget.setVerticalHeaderLabels([method])
         self.tableWidget.setHorizontalHeaderLabels(header2)
+        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.tableWidget.resizeColumnsToContents()
+        self.tableWidget.resizeRowsToContents()
 
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 

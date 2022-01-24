@@ -23,7 +23,8 @@ def split(matrix):
     return coeff,values
 
 
-def gauss_seidel(coefficients, values, results, max_iterations, eps):
+def gauss_seidel(matrix, results, max_iterations, eps):
+    coefficients,values = split(matrix)
     rows = len(coefficients)
 
     all_values = np.full((max_iterations, rows), np.nan)

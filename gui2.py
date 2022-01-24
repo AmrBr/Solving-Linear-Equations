@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import output
+import functions
+import seidel
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -94,12 +96,12 @@ class Ui_MainWindow(object):
         if self.iterationsInput.text().strip() == "":
             maxIterations = 50
         else:
-            maxIterations = self.iterationsInput.text()
+            maxIterations = self.iterationsInput.text().strip()
 
         if self.percisionInput.text().strip() == "":
             percision = 0.00001
         else:
-            percision = self.percisionInput.text()
+            percision = self.percisionInput.text().strip()
 
         if self.fileRadio.isChecked():
             file_name = self.fileInput.text() + ".txt"
@@ -120,29 +122,35 @@ class Ui_MainWindow(object):
             for i in range(0, numberOfEquations):
                 equations.append(fileContent[i+2].strip())
 
+            if index == 3:
+                initialValues = fileContent[numberOfEquations+2].strip().split(" ")
+
         else:
             index = self.methods.currentIndex()
             numberOfEquations = int(self.numberOfEqInput.text().strip())
             equationsTextInput = self.equationsInput.toPlainText()
             equations = equationsTextInput.split("\n")
-            initialValues = self.valuesInput.text().split()
+            initialValues = self.valuesInput.text().strip().split()
+        roots = []
+        if index == 0:
+            roots.append(functions.Gauss_Elimination([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
+        elif index == 1:
+            roots.append(functions.LU_Decomposition([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
+        elif index == 2:
+            roots.append(functions.Gauss_Jordan([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
+        elif index == 3:
+            roots.append(seidel.gauss_seidel([[12, 3, -5, 1], [1, 5, 3, 28], [3, 7, 13, 76]], [1, 0, 1], int(maxIterations), float(percision)))
+        else:
+            roots.append(functions.Gauss_Elimination([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
+            roots.append(functions.LU_Decomposition([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
+            roots.append(functions.Gauss_Jordan([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
+            roots.append(seidel.gauss_seidel([[12, 3, -5, 1], [1, 5, 3, 28], [3, 7, 13, 76]], [1, 0, 1], int(maxIterations), float(percision)))
 
-        # if index == 0:
-        #     # Call "Gauss-elimination"
-        # elif index == 1:
-        #     # Call "LU decomposition"
-        # elif index == 2:
-        #     # Call "Gaussian-jordan"
-        # elif index == 3:
-        #     # Call "Gauss-seidel"
-        # else:
-        #     # Call All Methods
-
+        print(roots)
         self.outputWindow = QtWidgets.QMainWindow()
         self.ui2 = output.Ui_outputWindow()
-        self.ui2.setupUi(self.outputWindow, [[1, 2, 3],[7,8,9],[4,5,6],[-8,23.2,-0.33]], 3, 4)
+        self.ui2.setupUi(self.outputWindow, roots, numberOfEquations, index)
         self.outputWindow.show()
-
 
 
 

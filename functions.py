@@ -1,7 +1,9 @@
 import numpy
+import seidel
 
 
-def LU_Decomposition(A, B):
+def LU_Decomposition(matrix):
+    A, B = seidel.split(matrix)
     size = len(A)
     L = [[0 for i in range(size)] for j in range(size)]
 
