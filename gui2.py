@@ -1,7 +1,10 @@
+import re
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import output
 import functions
 import seidel
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -131,27 +134,39 @@ class Ui_MainWindow(object):
             equationsTextInput = self.equationsInput.toPlainText()
             equations = equationsTextInput.split("\n")
             initialValues = self.valuesInput.text().strip().split()
+            initialValues = [float(i) for i in initialValues]
+        matrix = []
         roots = []
-        if index == 0:
-            roots.append(functions.Gauss_Elimination([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
-        elif index == 1:
-            roots.append(functions.LU_Decomposition([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
-        elif index == 2:
-            roots.append(functions.Gauss_Jordan([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
-        elif index == 3:
-            roots.append(seidel.gauss_seidel([[12, 3, -5, 1], [1, 5, 3, 28], [3, 7, 13, 76]], [1, 0, 1], int(maxIterations), float(percision)))
-        else:
-            roots.append(functions.Gauss_Elimination([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
-            roots.append(functions.LU_Decomposition([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
-            roots.append(functions.Gauss_Jordan([[1, 1, 2, 8], [-1, -2, 3, 1], [3, 7, 4, 10]]))
-            roots.append(seidel.gauss_seidel([[12, 3, -5, 1], [1, 5, 3, 28], [3, 7, 13, 76]], [1, 0, 1], int(maxIterations), float(percision)))
 
-        print(roots)
+
+        for j in range(0, numberOfEquations):
+            coeff = re.findall(r'[\d.\-+]+', equations[j])
+            coeff = [int(i) for i in coeff]
+            coeff[-1] = coeff[-1] * -1
+            matrix.append(coeff)
+
+        matrix1 = matrix.copy()
+        matrix2 = matrix.copy()
+        matrix3 = matrix.copy()
+
+        if index == 0:
+            roots.append(functions.Gauss_Elimination(matrix))
+        elif index == 1:
+            roots.append(functions.LU_Decomposition(matrix))
+        elif index == 2:
+            roots.append(functions.Gauss_Jordan(matrix))
+        elif index == 3:
+            roots.append(seidel.gauss_seidel(matrix, initialValues, int(maxIterations), float(percision)))
+        else:
+            roots.append(functions.Gauss_Elimination(matrix))
+            roots.append(functions.LU_Decomposition(matrix1))
+            roots.append(functions.Gauss_Jordan(matrix2))
+            roots.append(seidel.gauss_seidel(matrix3, initialValues, int(maxIterations), float(percision)))
+
         self.outputWindow = QtWidgets.QMainWindow()
         self.ui2 = output.Ui_outputWindow()
         self.ui2.setupUi(self.outputWindow, roots, numberOfEquations, index)
         self.outputWindow.show()
-
 
 
     def checked(self):
