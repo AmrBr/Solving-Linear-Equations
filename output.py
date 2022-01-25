@@ -62,6 +62,8 @@ class Ui_outputWindow(object):
             for j in range(0, len(data[i])):
                 newItem = QTableWidgetItem(str(data[i][j]))
                 self.tableWidget.setItem(i, j, newItem)
+                if index != 4:
+                    header2.append(header[j])
             header2.append(header[i])
         if index == 4:
             self.tableWidget.setVerticalHeaderLabels(["Gaussian-elimination", "LU decomposition", "Gaussian-jordan", "Gauss-seidel"])

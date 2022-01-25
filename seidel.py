@@ -27,14 +27,15 @@ def gauss_seidel(matrix, results, max_iterations, eps):
     coefficients,values = split(matrix)
     rows = len(coefficients)
 
-    all_values = np.full((max_iterations, rows), np.nan)
+    all_values = np.full((max_iterations + 1, rows), np.nan)
 
-    for k in range(0, max_iterations):
+    for s in range(rows):
+        position = [int(rows*0 + s)]
+        np.put(all_values, position, results[s])
+    for k in range(1, max_iterations + 1):
 
         for i in range(rows):
             results[i] = values[i]
-            position = [int(rows * k + i)]
-            np.put(all_values, position, results[i])
             for j in range(rows):
                 if i == j:
                     continue
@@ -46,7 +47,7 @@ def gauss_seidel(matrix, results, max_iterations, eps):
 
         flag = 0
         for v in range(rows):
-            if abs(all_values[k - 1][0] - all_values[k][0]) / all_values[k - 1][0] <= eps:
+            if abs(all_values[k-1][v] - all_values[k][v]) / all_values[k][v] <= eps:
                 flag = flag + 1
         if flag == rows:
             break
