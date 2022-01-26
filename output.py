@@ -60,7 +60,7 @@ class Ui_outputWindow(object):
         self.methodLabel.setText(method)
         for i in range(0, len(data)):
             for j in range(0, len(data[i])):
-                newItem = QTableWidgetItem(str(data[i][j]))
+                newItem = QTableWidgetItem(str(round(data[i][j], 9)))
                 self.tableWidget.setItem(i, j, newItem)
                 if index != 4:
                     header2.append(header[j])

@@ -79,6 +79,11 @@ class Ui_MainWindow(object):
         self.equationRadio.setChecked(True)
         self.fileInput.setEnabled(False)
 
+        # Set default options
+        self.valuesInput.setEnabled(False)
+        self.iterationsInput.setEnabled(False)
+        self.percisionInput.setEnabled(False)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -103,6 +108,22 @@ class Ui_MainWindow(object):
         # On State change functions
         self.fileRadio.toggled.connect(self.checked)
         self.finishButton.clicked.connect(self.clicked)
+        self.methods.activated.connect(self.changed)
+
+
+    def changed(self):
+        index = self.methods.currentIndex()
+        if index == 3 or index == 4:
+            self.valuesInput.setEnabled(True)
+            self.iterationsInput.setEnabled(True)
+            self.percisionInput.setEnabled(True)
+        else:
+            self.valuesInput.setEnabled(False)
+            self.iterationsInput.setEnabled(False)
+            self.percisionInput.setEnabled(False)
+            self.valuesInput.setText('')
+            self.iterationsInput.setText('')
+            self.percisionInput.setText('')
 
     def clicked(self):
         equations = []
@@ -140,6 +161,7 @@ class Ui_MainWindow(object):
 
             if index == 3:
                 initialValues = fileContent[numberOfEquations + 2].strip().split(" ")
+                initialValues = [float(i) for i in initialValues]
 
         # insert the data using the GUI
         else:
@@ -184,15 +206,30 @@ class Ui_MainWindow(object):
         self.outputWindow.show()
 
     def checked(self):
+        index = self.methods.currentIndex()
         if self.fileRadio.isChecked():
             self.fileInput.setEnabled(True)
             self.equationsInput.setEnabled(False)
             self.numberOfEqInput.setEnabled(False)
             self.valuesInput.setEnabled(False)
             self.methods.setEnabled(False)
+            self.iterationsInput.setEnabled(True)
+            self.percisionInput.setEnabled(True)
+            self.equationsInput.setPlainText('')
+            self.numberOfEqInput.setText('')
+            self.valuesInput.setText('')
         else:
             self.equationsInput.setEnabled(True)
             self.numberOfEqInput.setEnabled(True)
             self.valuesInput.setEnabled(True)
             self.fileInput.setEnabled(False)
             self.methods.setEnabled(True)
+            if index == 0 or index == 1 or index == 2:
+                self.iterationsInput.setEnabled(False)
+                self.percisionInput.setEnabled(False)
+                self.valuesInput.setEnabled(False)
+            else:
+                self.iterationsInput.setEnabled(True)
+                self.percisionInput.setEnabled(True)
+                self.valuesInput.setEnabled(True)
+            self.fileInput.setText('')
